@@ -1,0 +1,15 @@
+{
+  "run": "pneumonia_plocal_lora_r10_s0",
+  "dataset": "pneumoniamnist",
+  "preprocessing": "p_local",
+  "backbone": "resnet50",
+  "transfer": "lora",
+  "regime": 0.1,
+  "seed": 0,
+  "trainable_params": 306178,
+  "wall_clock_s": 29.56,
+  "auroc": 0.9586346701731318,
+  "accuracy": 0.8653846153846154,
+  "macro_f1": 0.8458769979887795,
+  "ece": 0.08331909364996812
+}

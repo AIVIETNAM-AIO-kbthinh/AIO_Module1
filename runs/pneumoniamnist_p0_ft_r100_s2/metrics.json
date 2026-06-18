@@ -1,0 +1,15 @@
+{
+  "run": "pneumoniamnist_p0_ft_r100_s2",
+  "dataset": "pneumoniamnist",
+  "preprocessing": "p0",
+  "backbone": "resnet50",
+  "transfer": "ft",
+  "regime": 1.0,
+  "seed": 2,
+  "trainable_params": 23512130,
+  "wall_clock_s": 119.17,
+  "auroc": 0.9235152312075389,
+  "accuracy": 0.8413461538461539,
+  "macro_f1": 0.810134402075195,
+  "ece": 0.1413976896840793
+}

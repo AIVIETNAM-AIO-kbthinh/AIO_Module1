@@ -1,0 +1,52 @@
+run:
+  output_dir: runs
+  seed: 0
+  name: dermamnist_p_global_lp_r100_s0
+data:
+  resolution: 64
+  root: data
+  as_rgb: true
+  clahe:
+    clip_limit: 2.0
+    tile_grid_size: 8
+  augmentation:
+    horizontal_flip:
+      enabled: true
+      p: 0.5
+    vertical_flip:
+      enabled: false
+      p: 0.5
+    rotation:
+      enabled: true
+      degrees: 10
+  dataset: dermamnist
+  preprocessing: p_global
+  regime: 1.0
+model:
+  backbone: resnet50
+  pretrained: true
+  lora:
+    rank: 8
+    alpha: 16
+    conv_target: kernel3
+  transfer: lp
+train:
+  epochs: 30
+  batch_size: 64
+  num_workers: 0
+  optimizer:
+    name: adamw
+    lr: 0.001
+    kwargs:
+      weight_decay: 0.0001
+  selection:
+    monitor: auroc
+    early_stopping_patience: 0
+eval:
+  metrics:
+  - auroc
+  - accuracy
+  - macro_f1
+  - ece
+  split: test
+  ece_bins: 15

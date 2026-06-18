@@ -1,0 +1,23 @@
+# Python bytecode and caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Large dataset files
+data/*.npz
+
+# PyTorch checkpoints (exclude large binary files)
+*.pt
+*.pth
+*.ckpt
+
+# Local design plans or scratchpad files
+plan*.md

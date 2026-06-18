@@ -1,0 +1,15 @@
+{
+  "run": "dermamnist_p0_ft_r100_s0",
+  "dataset": "dermamnist",
+  "preprocessing": "p0",
+  "backbone": "resnet50",
+  "transfer": "ft",
+  "regime": 1.0,
+  "seed": 0,
+  "trainable_params": 23522375,
+  "wall_clock_s": 181.12,
+  "auroc": 0.9591783332858362,
+  "accuracy": 0.8219451371571073,
+  "macro_f1": 0.7040056083496455,
+  "ece": 0.12451850369089561
+}

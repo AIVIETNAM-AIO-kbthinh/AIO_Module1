@@ -19,10 +19,14 @@ Legend: `[x]` done · `[ ]` not started · `[~]` in progress.
 
 ## Next up
 
-### 1. Baseline reproduction on GPU (Week 1 milestone) 
-- [ ] Run ResNet-50 / P0 / 100% / FT on each dataset on the GPU server.
-- [ ] Compare AUROC/accuracy against the published MedMNIST numbers (within tolerance).
-- [ ] Record the baseline table; confirm the harness is trustworthy before scaling up.
+### 1. Baseline reproduction on GPU (Week 1 milestone) ✅ done
+- [x] Run ResNet-50 / P0 / 100% / FT on each dataset on the GPU server.
+      PneumoniaMNIST: AUROC 0.958±0.026, Acc 0.873±0.037 (3 seeds)
+      DermaMNIST:     AUROC 0.960±0.004, Acc 0.823±0.009 (3 seeds)
+- [x] Compare AUROC/accuracy against the published MedMNIST numbers (within tolerance).
+      Both datasets match or exceed published benchmarks.
+- [x] Record the baseline table; confirm the harness is trustworthy before scaling up.
+      Results in runs/results.csv; checkpoints + metrics.json per run.
 
 ### 2. Experiment-matrix orchestration (Week 2) 
 - [x] Define the locked core matrix in one place (`configs/matrix/core.yaml`):
