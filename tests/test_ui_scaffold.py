@@ -4,6 +4,7 @@ from pathlib import Path
 
 from src.ui.bootstrap import REPO_ROOT, ensure_repo_on_path
 from src.ui.config import CORE_MATRIX_RUN_COUNT, DEFAULT_RUNS_DIR, DISCLAIMER
+from src.ui.paths import resolve_path, to_relative_path
 
 
 def test_bootstrap_puts_repo_on_path():
@@ -14,7 +15,8 @@ def test_bootstrap_puts_repo_on_path():
 def test_ui_config_paths_exist():
     assert (REPO_ROOT / "configs" / "matrix" / "core.yaml").is_file()
     assert (REPO_ROOT / "configs" / "example_run.yaml").is_file()
-    assert DEFAULT_RUNS_DIR == REPO_ROOT / "runs"
+    assert DEFAULT_RUNS_DIR == "runs"
+    assert resolve_path(DEFAULT_RUNS_DIR) == REPO_ROOT / "runs"
 
 
 def test_core_matrix_run_count():

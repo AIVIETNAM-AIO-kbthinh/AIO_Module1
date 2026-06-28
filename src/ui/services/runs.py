@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from ..config import DEFAULT_RUNS_DIR
+from ..config import DEFAULT_RUNS_DIR, resolve_path
 from .configs import find_config_path
 
 
@@ -32,7 +32,7 @@ def get_run_detail(
     config_path: Path | str | None = None,
 ) -> RunDetail | None:
     """Load ``metrics.json`` for ``run_name``; return ``None`` if not found."""
-    root = Path(runs_dir) if runs_dir is not None else DEFAULT_RUNS_DIR
+    root = resolve_path(runs_dir) if runs_dir is not None else resolve_path(DEFAULT_RUNS_DIR)
     directory = run_directory(root, run_name)
     metrics_path = directory / "metrics.json"
     if not metrics_path.is_file():
@@ -42,7 +42,10 @@ def get_run_detail(
         metrics = json.load(handle)
 
     checkpoint = directory / "checkpoint.pt"
-    resolved_config = Path(config_path) if config_path is not None else find_config_path(run_name)
+    if config_path is not None:
+        resolved_config = resolve_path(config_path)
+    else:
+        resolved_config = find_config_path(run_name)
 
     return RunDetail(
         run_name=run_name,

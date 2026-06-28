@@ -1,7 +1,5 @@
 """Results dashboard — filterable table and run detail."""
 
-from pathlib import Path
-
 import streamlit as st
 
 from src.ui.bootstrap import ensure_repo_on_path
@@ -11,6 +9,7 @@ ensure_repo_on_path()
 from src.ui.components import render_disclaimer
 from src.ui.components.filters import apply_filters, render_results_filters
 from src.ui.components.formatting import format_regime
+from src.ui.components.paths import path_input
 from src.ui.components.run_detail import render_run_detail
 from src.ui.config import APP_TITLE, DEFAULT_RESULTS_CSV, DEFAULT_RUNS_DIR
 from src.ui.services import load_results, summarize_completion
@@ -22,19 +21,10 @@ st.header("Results")
 
 with st.sidebar:
     st.subheader("Data source")
-    results_path = st.text_input(
-        "Results CSV",
-        value=str(DEFAULT_RESULTS_CSV),
-        help="Path to the consolidated results file.",
-    )
-    runs_path = st.text_input(
-        "Runs directory",
-        value=str(DEFAULT_RUNS_DIR),
-        help="Directory containing per-run folders with metrics.json.",
-    )
+    results_path = path_input("Results CSV", DEFAULT_RESULTS_CSV, key="results_csv")
+    runs_path = path_input("Runs directory", DEFAULT_RUNS_DIR, key="results_runs_dir")
 
 table = load_results(results_path)
-runs_dir = Path(runs_path)
 
 if not table.found:
     st.info(
@@ -69,7 +59,8 @@ if "regime" in display.columns:
     display["regime_label"] = display["regime"].map(format_regime)
 
 st.subheader("Experiment runs")
-st.caption(f"{len(filtered)} run(s) shown · source: `{table.source_path}`")
+display_path = table.source_path_display or results_path
+st.caption(f"{len(filtered)} run(s) shown · source: `{display_path}`")
 
 selection = st.dataframe(
     display,
@@ -89,4 +80,4 @@ run_name = str(selected["run"])
 
 st.divider()
 st.subheader(f"Run detail — `{run_name}`")
-render_run_detail(run_name, runs_dir=runs_dir)
+render_run_detail(run_name, runs_dir=runs_path)

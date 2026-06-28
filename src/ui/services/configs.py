@@ -7,11 +7,11 @@ from typing import Any
 import yaml
 
 from ...utils.config import RunConfig, load_config
-from ..config import REPO_ROOT
+from ..config import resolve_path
 
-DEFAULT_CONFIG_DIRS: tuple[Path, ...] = (
-    REPO_ROOT / "configs" / "core",
-    REPO_ROOT / "configs",
+DEFAULT_CONFIG_DIRS: tuple[str, ...] = (
+    "configs/core",
+    "configs",
 )
 
 
@@ -29,12 +29,12 @@ def _read_run_name(path: Path) -> str | None:
 
 @lru_cache(maxsize=1)
 def build_config_index(
-    dirs: tuple[str, ...] = tuple(str(path) for path in DEFAULT_CONFIG_DIRS),
+    dirs: tuple[str, ...] = DEFAULT_CONFIG_DIRS,
 ) -> dict[str, Path]:
     """Map ``run.name`` → config path by scanning YAML files once."""
     index: dict[str, Path] = {}
     for directory in dirs:
-        root = Path(directory)
+        root = resolve_path(directory)
         if not root.is_dir():
             continue
         for path in sorted(root.glob("*.yaml")):
@@ -50,23 +50,23 @@ def build_config_index(
 def find_config_path(
     run_name: str,
     *,
-    search_dirs: tuple[Path, ...] | None = None,
+    search_dirs: tuple[str, ...] | None = None,
 ) -> Path | None:
     """Return the config file path for ``run_name``, if discoverable."""
     dirs = search_dirs if search_dirs is not None else DEFAULT_CONFIG_DIRS
     for directory in dirs:
-        candidate = directory / f"{run_name}.yaml"
+        candidate = resolve_path(directory) / f"{run_name}.yaml"
         if candidate.is_file():
             return candidate
 
-    index = build_config_index(tuple(str(path) for path in dirs))
+    index = build_config_index(dirs)
     return index.get(run_name)
 
 
 def load_run_config(
     run_name: str,
     *,
-    search_dirs: tuple[Path, ...] | None = None,
+    search_dirs: tuple[str, ...] | None = None,
 ) -> RunConfig | None:
     """Load a typed ``RunConfig`` for ``run_name``."""
     path = find_config_path(run_name, search_dirs=search_dirs)
@@ -78,7 +78,7 @@ def load_run_config(
 def load_run_config_raw(
     run_name: str,
     *,
-    search_dirs: tuple[Path, ...] | None = None,
+    search_dirs: tuple[str, ...] | None = None,
 ) -> dict[str, Any] | None:
     """Load the raw YAML mapping for ``run_name``."""
     path = find_config_path(run_name, search_dirs=search_dirs)

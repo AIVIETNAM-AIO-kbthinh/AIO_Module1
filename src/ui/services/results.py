@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from ..config import DEFAULT_RESULTS_CSV
+from ..config import DEFAULT_RESULTS_CSV, resolve_path, to_relative_path
 from .schema import ALL_KNOWN_COLUMNS, REQUIRED_COLUMNS
 
 
@@ -18,6 +18,12 @@ class ResultsTable:
     found: bool
     missing_columns: tuple[str, ...]
     extra_columns: tuple[str, ...]
+
+    @property
+    def source_path_display(self) -> str | None:
+        if self.source_path is None:
+            return None
+        return to_relative_path(self.source_path)
 
     @property
     def row_count(self) -> int:
@@ -46,7 +52,8 @@ def _coerce_numeric_columns(frame: pd.DataFrame) -> pd.DataFrame:
 
 def load_results(path: Path | str | None = None) -> ResultsTable:
     """Load ``results.csv``; return an empty table when the file is missing."""
-    source = Path(path) if path is not None else DEFAULT_RESULTS_CSV
+    relative = path if path is not None else DEFAULT_RESULTS_CSV
+    source = resolve_path(relative)
     if not source.is_file():
         return ResultsTable(
             frame=_empty_frame(),

@@ -5,12 +5,13 @@ from pathlib import Path
 import streamlit as st
 import yaml
 
+from ..config import to_relative_path
 from ..services.configs import load_run_config_raw
 from ..services.runs import get_run_detail
 from .formatting import format_metric
 
 
-def render_run_detail(run_name: str, *, runs_dir: Path | None = None) -> None:
+def render_run_detail(run_name: str, *, runs_dir: str | Path | None = None) -> None:
     """Show metrics, artifact paths, and config for one run."""
     detail = get_run_detail(run_name, runs_dir=runs_dir)
     if detail is None:
@@ -32,13 +33,13 @@ def render_run_detail(run_name: str, *, runs_dir: Path | None = None) -> None:
         meta[2].metric("Seed", str(int(metrics["seed"])))
 
     st.markdown("**Artifacts**")
-    artifact_lines = [f"- Metrics: `{detail.metrics_path}`"]
+    artifact_lines = [f"- Metrics: `{to_relative_path(detail.metrics_path)}`"]
     if detail.checkpoint_path is not None:
-        artifact_lines.append(f"- Checkpoint: `{detail.checkpoint_path}`")
+        artifact_lines.append(f"- Checkpoint: `{to_relative_path(detail.checkpoint_path)}`")
     else:
         artifact_lines.append("- Checkpoint: not found")
     if detail.config_path is not None:
-        artifact_lines.append(f"- Config: `{detail.config_path}`")
+        artifact_lines.append(f"- Config: `{to_relative_path(detail.config_path)}`")
     st.markdown("\n".join(artifact_lines))
 
     raw_config = load_run_config_raw(run_name)

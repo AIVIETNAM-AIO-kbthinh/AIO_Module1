@@ -106,10 +106,13 @@ Default URL: http://localhost:8501
 
 ## Configuration
 
-| Setting | Default | Override |
-|---------|---------|----------|
-| Runs directory | `runs/` | Sidebar on home page (Phase 2) |
+| Setting | Default (relative) | Override |
+|---------|------------------|----------|
+| Runs directory | `runs` | Sidebar path inputs on each page |
+| Results CSV | `runs/results.csv` | Sidebar path inputs |
 | Core matrix size | 162 | `src/ui/config.py` |
+
+All UI paths are **repository-relative** strings. The services resolve them with `src.ui.paths.resolve_path` before filesystem access.
 
 ## Data services (Phase 1)
 
@@ -133,5 +136,5 @@ Fixtures for tests live under `tests/fixtures/ui/`.
 - [x] Phase 1 — data services (`results.csv`, `metrics.json`, aggregation)
 - [x] Phase 2 — results dashboard MVP
 - [x] Phase 3 — charts and decision guide
-- [ ] Phase 4 — run experiment from UI
-- [ ] Phase 5 — matrix orchestration
+- [x] Phase 4 — run experiment from UI
+- [x] Phase 5 — matrix orchestration

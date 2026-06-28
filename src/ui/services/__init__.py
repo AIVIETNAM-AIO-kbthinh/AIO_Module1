@@ -1,10 +1,20 @@
-"""Data access layer for the Streamlit dashboard (Phase 1)."""
+"""Data access layer for the Streamlit dashboard."""
 
 from .aggregation import (
     CompletionStats,
     aggregate_results,
     best_combinations,
     summarize_completion,
+)
+from .batch import (
+    BatchRunResult,
+    MatrixGenerationResult,
+    completed_run_names,
+    generate_matrix_configs,
+    load_assignment,
+    load_matrix_spec,
+    run_batch,
+    slice_for_account,
 )
 from .charts import (
     available_metrics,
@@ -24,6 +34,19 @@ from .configs import (
     load_run_config,
     load_run_config_raw,
 )
+from .experiment import (
+    FORM_METRICS,
+    FORM_PREPROCESSING,
+    FORM_SPLITS,
+    FORM_TRANSFER,
+    GpuStatus,
+    build_config_dict,
+    build_run_name,
+    check_gpu_environment,
+    config_to_yaml,
+    parse_run_config,
+    run_experiment_with_logs,
+)
 from .recommend import Priority, Recommendation, recommend
 from .results import ResultsTable, filter_results, load_results
 from .runs import RunDetail, get_run_detail, run_directory
@@ -37,35 +60,54 @@ from .schema import (
 
 __all__ = [
     "ALL_KNOWN_COLUMNS",
+    "BatchRunResult",
+    "CompletionStats",
     "DEFAULT_AGGREGATE_METRICS",
     "DEFAULT_CONFIG_DIRS",
-    "CompletionStats",
+    "FORM_METRICS",
+    "FORM_PREPROCESSING",
+    "FORM_SPLITS",
+    "FORM_TRANSFER",
+    "GpuStatus",
     "GROUP_AXIS_COLUMNS",
     "METRIC_COLUMNS",
+    "MatrixGenerationResult",
+    "Priority",
+    "Recommendation",
     "REQUIRED_COLUMNS",
     "ResultsTable",
     "RunDetail",
-    "Priority",
-    "Recommendation",
     "aggregate_results",
     "available_metrics",
     "best_combinations",
+    "build_config_dict",
     "build_config_index",
+    "build_run_name",
+    "check_gpu_environment",
+    "completed_run_names",
+    "config_to_yaml",
     "filter_results",
     "find_config_path",
+    "generate_matrix_configs",
     "get_run_detail",
     "heatmap_figure",
+    "load_assignment",
+    "load_matrix_spec",
     "load_results",
     "load_run_config",
     "load_run_config_raw",
     "pareto_figure",
     "pareto_frame",
     "pareto_frontier",
+    "parse_run_config",
     "pivot_preprocessing_regime",
     "pivot_preprocessing_transfer",
     "recommend",
     "regime_line_figure",
     "regime_line_frame",
+    "run_batch",
     "run_directory",
+    "run_experiment_with_logs",
+    "slice_for_account",
     "summarize_completion",
 ]

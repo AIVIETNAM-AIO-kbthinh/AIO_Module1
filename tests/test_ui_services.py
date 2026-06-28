@@ -64,8 +64,8 @@ def test_filter_results_by_axes():
 def test_get_run_detail_loads_metrics():
     detail = get_run_detail(
         "pneumoniamnist_p0_lp_r100_s0",
-        runs_dir=_RUNS_DIR,
-        config_path=_CONFIG_DIR / "pneumoniamnist_p0_lp_r100_s0.yaml",
+        runs_dir="tests/fixtures/ui/runs",
+        config_path="tests/fixtures/ui/configs/core/pneumoniamnist_p0_lp_r100_s0.yaml",
     )
     assert detail is not None
     assert detail.metrics["auroc"] == 0.81
@@ -86,7 +86,7 @@ def test_find_config_by_filename(tmp_path):
 
 
 def test_build_config_index_reads_run_name_from_yaml():
-    index = build_config_index((str(_CONFIG_DIR),))
+    index = build_config_index(("tests/fixtures/ui/configs/core",))
     assert "pneumoniamnist_p0_lp_r100_s0" in index
     assert index["pneumoniamnist_p0_lp_r100_s0"].name == "pneumoniamnist_p0_lp_r100_s0.yaml"
 
@@ -94,7 +94,7 @@ def test_build_config_index_reads_run_name_from_yaml():
 def test_load_run_config_returns_typed_config():
     config = load_run_config(
         "pneumoniamnist_p0_lp_r100_s0",
-        search_dirs=(_CONFIG_DIR,),
+        search_dirs=("tests/fixtures/ui/configs/core",),
     )
     assert config is not None
     assert config.run.name == "pneumoniamnist_p0_lp_r100_s0"

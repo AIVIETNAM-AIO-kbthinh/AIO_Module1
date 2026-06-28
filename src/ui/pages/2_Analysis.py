@@ -8,6 +8,7 @@ ensure_repo_on_path()
 
 from src.ui.components import render_disclaimer
 from src.ui.components.formatting import format_regime, format_metric
+from src.ui.components.paths import path_input
 from src.ui.config import APP_TITLE, DEFAULT_RESULTS_CSV
 from src.ui.services import aggregate_results, best_combinations, load_results
 from src.ui.services.charts import (
@@ -28,7 +29,8 @@ render_disclaimer()
 
 st.header("Analysis & decision guide")
 
-results_path = st.sidebar.text_input("Results CSV", value=str(DEFAULT_RESULTS_CSV))
+with st.sidebar:
+    results_path = path_input("Results CSV", DEFAULT_RESULTS_CSV, key="analysis_results_csv")
 table = load_results(results_path)
 
 if not table.found or table.frame.empty:

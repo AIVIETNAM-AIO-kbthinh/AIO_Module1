@@ -57,8 +57,8 @@ Legend: `[x]` done · `[ ]` not started · `[~]` in progress.
 - [x] Phase 1 — Data services over `results.csv` / `metrics.json`.
 - [x] Phase 2 — Results table and run detail pages.
 - [x] Phase 3 — Charts and decision guide.
-- [ ] Phase 4 — Run one experiment from the UI.
-- [ ] Phase 5 — Matrix batch orchestration.
+- [x] Phase 4 — Run one experiment from the UI.
+- [x] Phase 5 — Matrix batch orchestration.
 
 ## Notes for tracking
 - The core matrix is locked: extensions (third dataset, regime 25%, ViT-S
