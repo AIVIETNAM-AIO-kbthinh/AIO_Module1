@@ -516,13 +516,7 @@ Không có vấn đề blocking nào.
 - Tuy nhiên, vì đây là controlled study, thay đổi LR schedule giữa chừng sẽ phức tạp hóa so sánh
 - **Decision**: Giữ nguyên flat LR cho core matrix (đồng nhất), ghi nhận overfitting as-is. Nếu có thời gian, thêm LR schedule làm extension experiment
 
-#### 5.5 requirements.txt mismatch
 
-**Vấn đề:** `requirements.txt` pin `torch==2.12.0` (CPU), nhưng venv thực tế dùng `torch==2.11.0+cu128`.
-
-**Khuyến nghị:**
-- Cập nhật requirements.txt hoặc tạo `requirements-gpu.txt` riêng
-- Ghi rõ trong README cách cài GPU PyTorch
 
 ### 🟢 Nice-to-have (Post-core matrix)
 
