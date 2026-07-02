@@ -89,7 +89,7 @@ with tab_charts:
             title=f"{metric.upper()} — preprocessing × regime ({dataset})",
         )
         figure.update_layout(template=plotly_template)
-        st.plotly_chart(figure, use_container_width=True)
+        st.plotly_chart(figure, width="stretch")
 
     with col_right:
         prep_transfer = pivot_preprocessing_transfer(
@@ -106,7 +106,7 @@ with tab_charts:
             ),
         )
         figure.update_layout(template=plotly_template)
-        st.plotly_chart(figure, use_container_width=True)
+        st.plotly_chart(figure, width="stretch")
 
     line_data = regime_line_frame(
         aggregated,
@@ -120,7 +120,7 @@ with tab_charts:
         metric=metric,
     )
     line_figure.update_layout(template=plotly_template)
-    st.plotly_chart(line_figure, use_container_width=True)
+    st.plotly_chart(line_figure, width="stretch")
 
     pareto_points = pareto_frame(frame, dataset=dataset, regime=float(regime))
     frontier = pareto_frontier(pareto_points)
@@ -130,16 +130,16 @@ with tab_charts:
         title=f"Pareto frontier — AUROC vs params ({dataset}, {format_regime(regime)})",
     )
     pareto_chart.update_layout(template=plotly_template)
-    st.plotly_chart(pareto_chart, use_container_width=True)
+    st.plotly_chart(pareto_chart, width="stretch")
 
 with tab_table:
     with st.container(border=True):
         st.caption("Mean ± std over seeds for each preprocessing × transfer × regime combo.")
-        st.dataframe(aggregated, use_container_width=True, hide_index=True)
+        st.dataframe(aggregated, width="stretch", hide_index=True)
 
     with st.container(border=True):
         st.subheader("Best combo per dataset × regime (by AUROC)")
-        st.dataframe(best_combinations(aggregated, metric=metric), use_container_width=True)
+        st.dataframe(best_combinations(aggregated, metric=metric), width="stretch")
 
 with tab_guide:
     st.markdown(

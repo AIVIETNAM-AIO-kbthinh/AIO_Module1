@@ -48,7 +48,7 @@ with st.sidebar:
     data_root = path_input("Data root", DEFAULT_DATA_ROOT, key="run_data_root")
     results_csv = path_input("Results CSV", DEFAULT_RESULTS_CSV, key="run_results_csv")
 
-    if st.button("Check GPU", use_container_width=True):
+    if st.button("Check GPU", width="stretch"):
         status = check_gpu_environment()
         if status.available:
             st.success(status.message)
@@ -191,7 +191,7 @@ if validation_error:
     st.error(f"Config validation failed: {validation_error}")
 
 run_disabled = validation_error is not None or st.session_state.get("experiment_running", False)
-if st.button("Run experiment", type="primary", disabled=run_disabled, use_container_width=True):
+if st.button("Run experiment", type="primary", disabled=run_disabled, width="stretch"):
     st.session_state.experiment_running = True
     st.session_state.experiment_logs = [f"Starting run `{run_name}`..."]
     try:

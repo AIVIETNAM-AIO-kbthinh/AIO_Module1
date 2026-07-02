@@ -77,7 +77,7 @@ with st.container(border=True):
 
     selection = st.dataframe(
         display,
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
         on_select="rerun",
         selection_mode="single-row",

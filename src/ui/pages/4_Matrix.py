@@ -64,7 +64,7 @@ except ValueError as error:
     st.stop()
 
 with st.container(border=True):
-    if st.button("Generate configs", type="primary", use_container_width=True):
+    if st.button("Generate configs", type="primary", width="stretch"):
         try:
             st.session_state.matrix_generation = generate_matrix_configs(
                 matrix_spec=matrix_spec,
@@ -92,7 +92,7 @@ else:
         st.subheader("Assignment")
         progress = len(completed & set(assignment["run"].astype(str)))
         st.metric("Matrix progress", f"{progress} / {len(assignment)} runs in results")
-        st.dataframe(assignment, use_container_width=True, hide_index=True)
+        st.dataframe(assignment, width="stretch", hide_index=True)
 
     with st.container(border=True):
         account = st.selectbox(
@@ -119,7 +119,7 @@ else:
         if st.button(
             "Run account slice",
             type="primary",
-            use_container_width=True,
+            width="stretch",
             disabled=slice_df.empty,
         ):
             paths = slice_df["config_path"].astype(str).tolist()
