@@ -15,9 +15,10 @@ Foundation harness complete: data loading, the three preprocessing arms, the
 three transfer strategies, training/evaluation, config generation for the core
 matrix, and CPU smoke tests all run end to end. A Streamlit dashboard on top of
 the harness provides results browsing, analysis, single-run launching, and
-matrix orchestration. Next is baseline reproduction on a GPU server and running
-the 162-run core matrix. See [docs/ROADMAP.md](docs/ROADMAP.md) for the detailed
-status.
+matrix orchestration. The Phase 1 baselines (ResNet-50 / p0 / 100% data / full
+fine-tune, both datasets, 3 seeds) have been reproduced on GPU and match the
+published MedMNIST benchmark. Next is running the full 162-run core matrix. See
+[docs/ROADMAP.md](docs/ROADMAP.md) for the detailed status.
 
 ## Repository layout
 
@@ -25,7 +26,7 @@ status.
 configs/      One YAML per experiment run
 src/          Source packages (data, models, training, evaluation, utils, ui)
 tests/        CPU-friendly pytest smoke tests
-scripts/      Standalone scripts (GPU check, run experiment, launch UI)
+scripts/      Standalone scripts (GPU check, run experiment, Phase 1 baselines, launch UI)
 docs/         ROADMAP, UI stack and user flows (docs/UI.md)
 ```
 
@@ -57,6 +58,13 @@ python scripts/run_experiment.py --config configs/example_run.yaml
 
 Results are written to `<output_dir>/<run_name>/` (checkpoint and `metrics.json`)
 and appended to `<output_dir>/results.csv`.
+
+Reproduce the Phase 1 baselines (p0 / full fine-tune / 100% data, both datasets,
+3 seeds; GPU recommended):
+
+```bash
+python scripts/run_phase1_baselines.py
+```
 
 Launch the researcher dashboard:
 
