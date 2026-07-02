@@ -112,11 +112,12 @@ def pareto_frame(
         frame = frame[frame["dataset"].astype(str) == dataset]
     if regime is not None:
         frame = frame[frame["regime"].astype(float) == float(regime)]
-    required = {"auroc", "trainable_params", "preprocessing", "transfer"}
-    if not required.issubset(frame.columns):
+    required = ("auroc", "trainable_params", "preprocessing", "transfer")
+    if not set(required).issubset(frame.columns):
         return pd.DataFrame()
 
-    frame = frame[list(required | {"run", "regime"})].copy()
+    extra = [column for column in ("run", "regime") if column in frame.columns]
+    frame = frame[[*required, *extra]].copy()
     frame["combo"] = frame["preprocessing"].astype(str) + " / " + frame["transfer"].astype(str)
     return frame.reset_index(drop=True)
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any
 
 import torch
 import yaml
@@ -42,6 +42,7 @@ def build_config_dict(
     hflip_enabled: bool = True,
     hflip_p: float = 0.5,
     vflip_enabled: bool = False,
+    vflip_p: float = 0.5,
     rotation_enabled: bool = True,
     rotation_degrees: float = 10.0,
     backbone: str = "resnet50",
@@ -80,7 +81,7 @@ def build_config_dict(
             },
             "augmentation": {
                 "horizontal_flip": {"enabled": hflip_enabled, "p": hflip_p},
-                "vertical_flip": {"enabled": vflip_enabled, "p": 0.5},
+                "vertical_flip": {"enabled": vflip_enabled, "p": vflip_p},
                 "rotation": {"enabled": rotation_enabled, "degrees": rotation_degrees},
             },
         },
@@ -155,8 +156,6 @@ class _ListLogHandler(logging.Handler):
 def run_experiment_with_logs(
     config: RunConfig,
     log_lines: list[str],
-    *,
-    on_epoch: Callable[[int, int], None] | None = None,
 ) -> dict[str, Any]:
     """Execute one run and append training log lines to ``log_lines``."""
     logger = get_logger("training")

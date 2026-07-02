@@ -38,6 +38,9 @@ def _metric_columns(frame: pd.DataFrame) -> tuple[str, ...]:
     return tuple(columns)
 
 
+_AUROC_TOLERANCE = 0.02
+
+
 def _pick_auroc(row: pd.Series) -> Recommendation:
     return Recommendation(
         dataset=str(row["dataset"]),
@@ -56,6 +59,31 @@ def _pick_auroc(row: pd.Series) -> Recommendation:
         n_seeds=int(row["n_seeds"]),
         rationale="Highest mean AUROC for this dataset and regime.",
     )
+
+
+def _pick_by_cost(
+    aggregated: pd.DataFrame,
+    *,
+    cost_column: str,
+    rationale: str,
+) -> Recommendation | None:
+    """Pick the cheapest combo by ``cost_column``, restricted to combos within
+    ``_AUROC_TOLERANCE`` of the best mean AUROC when that metric is available."""
+    if cost_column not in aggregated.columns:
+        return None
+
+    if "auroc_mean" in aggregated.columns:
+        best_auroc = float(aggregated["auroc_mean"].max())
+        candidates = aggregated[aggregated["auroc_mean"] >= best_auroc - _AUROC_TOLERANCE]
+        sort_columns = [cost_column, "auroc_mean"]
+        ascending = [True, False]
+    else:
+        candidates = aggregated
+        sort_columns = [cost_column]
+        ascending = [True]
+
+    best = candidates.sort_values(sort_columns, ascending=ascending, kind="mergesort").iloc[0]
+    return replace(_pick_auroc(best), rationale=rationale)
 
 
 def recommend(
@@ -87,46 +115,22 @@ def recommend(
         return _pick_auroc(best)
 
     if priority is Priority.FEW_PARAMS:
-        if "trainable_params_mean" not in aggregated.columns:
-            return None
-        if "auroc_mean" in aggregated.columns:
-            best_auroc = float(aggregated["auroc_mean"].max())
-            tolerance = 0.02
-            candidates = aggregated[aggregated["auroc_mean"] >= best_auroc - tolerance]
-        else:
-            candidates = aggregated
-        best = candidates.sort_values(
-            ["trainable_params_mean", "auroc_mean"],
-            ascending=[True, False],
-            kind="mergesort",
-        ).iloc[0]
-        rec = _pick_auroc(best)
-        return replace(
-            rec,
+        return _pick_by_cost(
+            aggregated,
+            cost_column="trainable_params_mean",
             rationale=(
-                "Fewest trainable parameters among combos within 0.02 AUROC of the best."
+                f"Fewest trainable parameters among combos within {_AUROC_TOLERANCE:g} "
+                "AUROC of the best."
             ),
         )
 
     if priority is Priority.FAST:
-        if "wall_clock_s_mean" not in aggregated.columns:
-            return None
-        if "auroc_mean" in aggregated.columns:
-            best_auroc = float(aggregated["auroc_mean"].max())
-            tolerance = 0.02
-            candidates = aggregated[aggregated["auroc_mean"] >= best_auroc - tolerance]
-        else:
-            candidates = aggregated
-        best = candidates.sort_values(
-            ["wall_clock_s_mean", "auroc_mean"],
-            ascending=[True, False],
-            kind="mergesort",
-        ).iloc[0]
-        rec = _pick_auroc(best)
-        return replace(
-            rec,
+        return _pick_by_cost(
+            aggregated,
+            cost_column="wall_clock_s_mean",
             rationale=(
-                "Shortest mean wall-clock time among combos within 0.02 AUROC of the best."
+                f"Shortest mean wall-clock time among combos within {_AUROC_TOLERANCE:g} "
+                "AUROC of the best."
             ),
         )
 

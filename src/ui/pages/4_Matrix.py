@@ -64,8 +64,7 @@ except ValueError as error:
     st.stop()
 
 with st.container(border=True):
-    gen_cols = st.columns(2, gap="medium")
-    if gen_cols[0].button("Generate configs", type="primary", use_container_width=True):
+    if st.button("Generate configs", type="primary", use_container_width=True):
         try:
             st.session_state.matrix_generation = generate_matrix_configs(
                 matrix_spec=matrix_spec,
@@ -117,7 +116,12 @@ else:
 
         skip_completed = st.checkbox("Skip runs already in results.csv", value=True)
 
-        if gen_cols[1].button("Run account slice", use_container_width=True, disabled=slice_df.empty):
+        if st.button(
+            "Run account slice",
+            type="primary",
+            use_container_width=True,
+            disabled=slice_df.empty,
+        ):
             paths = slice_df["config_path"].astype(str).tolist()
             if skip_completed:
                 paths = [
